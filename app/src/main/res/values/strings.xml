@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">MRU</string>
+    <string name="serviceURL">http://services.groupkt.com/country/get/all</string>
+    <string name="category">Category</string>
+    <string name="complaint_details">Complaint Details</string>
+    <string name="sub_category">Sub Category</string>
+    <string name="sub_type">Sub Type</string>
+    <string name="submit_request">Submit Request</string>
+    <string name="type">Type</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email_id">Email</string>
+    <string name="password">Password</string>
+    <string name="mobile">Mobile</string>
+    <string name="name">Name</string>
+    <string name="postal_address">Postal Address</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="raise_service_request">Raise Service Request</string>
+    <string name="services_offered_desc">One stop solution for all Home and Kitchen appliances, electronics and consumer durable goods.</string>
+    <string name="services_offered">Services Offered</string>
+    <string name="about_us">About Us</string>
+    <string name="contact_us">9975727088</string>
+    <string name="about_us_title">About Us</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="raise_request_title">Raise Request</string>
+    <string name="services_offered_title">Service Offered</string>
+    <string name="share_pref">MRU_sharedPrefs</string>
+    <string name="json_categories">result</string>
+    <!--string name="registerUser">""</string>
+    <string name="validateUser">""</string>
+    <string name="allCategories"></string>
+    <string name="subCategories"></string>
+    <string name="productTypes"></string-->
+</resources>

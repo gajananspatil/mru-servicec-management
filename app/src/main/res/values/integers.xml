@@ -1,0 +1,5 @@
+<resources>
+    <integer name="complaintDetailsMaxLength">250</integer>
+    <integer name="mobileNoLength">10</integer>
+    <integer name="minPasswordLength">6</integer>
+</resources>
