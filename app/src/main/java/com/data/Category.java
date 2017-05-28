@@ -19,6 +19,7 @@ public class Category {
     public Category(Integer categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        subCategories = new HashMap<>();
     }
 
     public int getCategoryId() {

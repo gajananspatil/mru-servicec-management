@@ -17,6 +17,7 @@ public class ProductType {
     public ProductType(Integer productId, String productName) {
         this.productId = productId;
         this.productName = productName;
+        productSubTypes = new HashMap<>();
     }
 
     public ProductType() {

@@ -1,8 +1,7 @@
 package com.activities;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -12,16 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.StringManuplation.Trim;
-
 import com.helpers.HttpHandler;
 import com.helpers.Toaster;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class signUp extends AppCompatActivity {
@@ -144,7 +140,7 @@ public class signUp extends AppCompatActivity {
         boolean isValidInfo = validateSignUpFrom();
 
 
-           if( isValidInfo )  //TODO Added for debug purpose remove this condition and code
+          /* if( isValidInfo )  //TODO Added for debug purpose remove this condition and code
            {
                SharedPreferences preferences = getBaseContext().getSharedPreferences( getString(R.string.share_pref), MODE_PRIVATE );
                SharedPreferences.Editor editor = preferences.edit();
@@ -167,55 +163,55 @@ public class signUp extends AppCompatActivity {
            else
            {
                 return;
-           }
-
-           {
-
-                   String registerUrl = getResources().getString( R.string.serviceURL) + "/userRegistration";
-
-                   HashMap<String,String> userDetails = new HashMap<>();
-                   //UserDetails userDetails = new UserDetails();
-                   userDetails.put( "username", Trim.text((EditText) vMobile) );
-                   userDetails.put("password",  Trim.text((EditText) vPassword) );
-                   userDetails.put( "emailid", Trim.text((EditText) vEmailId) );
-                   userDetails.put( "mobileno",  Trim.text((EditText) vMobile) );
-                   userDetails.put("address",  Trim.text((EditText) vAddress) );
-
-                   String response = "";
-                   try
-                   {
-                       HttpHandler httpHandler = new HttpHandler();
-                       response = httpHandler.performPostCall( registerUrl, userDetails);
-                       JSONObject jsonObject= new JSONObject( response);
-
-                       //TODO Handle JSON Response for registration
-
-                       // Get a reference to the SharedPReferences, SO WE CAN BEGIN TO STORE THE VALUES ENTERED
-                       SharedPreferences preferences = getBaseContext().getSharedPreferences( getString(R.string.share_pref), MODE_PRIVATE );
-                       SharedPreferences.Editor editor = preferences.edit();
-
-                       editor.putString( "username",Trim.text((EditText) vMobile) );
-                       editor.putString( "password",Trim.text((EditText) vPassword) );
-
-                       // Must Call this to write values to the Preferences
-                       editor.commit();
+           }*/
 
 
-                       Toaster.makeToast(this, "User registered successfully.", Toast.LENGTH_LONG);
+        if( isValidInfo )
+        {
+            String registerUrl = getResources().getString( R.string.serviceURL) + "/userRegistration";
+
+            HashMap<String,String> userDetails = new HashMap<>();
+            //UserDetails userDetails = new UserDetails();
+            userDetails.put( "username", Trim.text((EditText) vMobile) );
+            userDetails.put("password",  Trim.text((EditText) vPassword) );
+            userDetails.put( "emailid", Trim.text((EditText) vEmailId) );
+            userDetails.put( "mobileno",  Trim.text((EditText) vMobile) );
+            userDetails.put("address",  Trim.text((EditText) vAddress) );
+
+            String response = "";
+            try
+            {
+                HttpHandler httpHandler = new HttpHandler();
+                response = httpHandler.performPostCall( registerUrl, userDetails);
+                JSONObject jsonObject= new JSONObject( response);
+
+                //TODO Handle JSON Response for registration
+
+                // Get a reference to the SharedPReferences, SO WE CAN BEGIN TO STORE THE VALUES ENTERED
+                SharedPreferences preferences = getBaseContext().getSharedPreferences( getString(R.string.share_pref), MODE_PRIVATE );
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putString( "username",Trim.text((EditText) vMobile) );
+                editor.putString( "password",Trim.text((EditText) vPassword) );
+
+                // Must Call this to write values to the Preferences
+                editor.commit();
 
 
-                   }
-                   catch ( JSONException je)
-                   {
-                       Log.e( TAG, "SignUp-"+je.getMessage());
-                   }
-                   catch ( Exception e)
-                   {
-                       Log.e( TAG, "SignUp-"+e.getMessage());
-                   }
+                Toaster.makeToast(this, "User registered successfully.", Toast.LENGTH_LONG);
 
-               }
+            }
+            catch ( JSONException je)
+            {
+                Log.e( TAG, "SignUp-"+je.getMessage());
+            }
+            catch ( Exception e)
+            {
+                Log.e( TAG, "SignUp-"+e.getMessage());
+            }
 
-       }
+        }
+
+    }
 
 }

@@ -1,9 +1,8 @@
 package com.activities;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.util.AsyncListUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,18 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.StringManuplation.Trim;
-import com.helpers.DialogBox;
-import com.helpers.HttpHandler;
 import com.data.Category;
-import com.data.SubCategory;
 import com.data.ProductType;
+import com.data.SubCategory;
+import com.helpers.HttpHandler;
 import com.helpers.Toaster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -60,7 +57,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
 
         categorySpinner = (Spinner) findViewById( R.id.spinnerCategory);
         subCategorySpinner = (Spinner) findViewById( R.id.spinnerSubCategory);
-        productTypeSpinner = (Spinner) findViewById( R.id.spinnerSubCategory);
+        productTypeSpinner = (Spinner) findViewById( R.id.spinnerProductType);
         productSubTypeSpinner = (Spinner) findViewById( R.id.spinnerSubType);
         complaintDetailsEditText = (EditText) findViewById( R.id.complaint_details);
         submitButton = (Button) findViewById( R.id.submitRequestButton) ;
@@ -72,37 +69,19 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
 
         progressBar = (ProgressBar) findViewById( R.id.requestProgressBar);
         // On create of SubmitRequest category details need have populated
-        new GetProducts().execute(R.id.spinnerCategory );
+        new GetCategories().execute( );
 
     }
 
     /*
         On create page of submit request all the categories should be available for selection.
      */
-
-    private class GetProducts extends AsyncTask<Integer,Integer ,Integer>
+    private class GetCategories extends AsyncTask<Void,Void ,Integer>
     {
-
-
         @Override
-        protected Integer doInBackground(Integer... params) {
+        protected Integer doInBackground(Void... params) {
 
-            if(params[0] == R.id.spinnerCategory ) {
-                populateCategoryDetails();
-            }
-            else if( params[0] == R.id.spinnerSubCategory )
-            {
-                PopulateSubCategoryDetails();
-            }
-            else if( params[0] == R.id.spinnerProductType )
-            {
-                PopulateProductType();
-            }
-            else
-            {
-                Log.e( TAG, "Invalid parameters received");
-            }
-
+            populateCategoryDetails();
             return 0;
         }
 
@@ -110,6 +89,14 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
         protected void onPostExecute(Integer v)
         {
             progressBar.setVisibility(View.GONE);
+            Set<String> keySet = allCategories.keySet();
+            String[] catArr = keySet.toArray( new String[ keySet.size()]);
+
+            //TODO Verify activity lifecycle - do we need to create new adaptor every time or check if we can reuse adapter
+
+            ArrayAdapter<String> adapter =
+                    new ArrayAdapter<String>( submitRequest.this, android.R.layout.simple_spinner_dropdown_item, catArr );
+            categorySpinner.setAdapter( adapter);
         }
 
         @Override
@@ -118,9 +105,75 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
             progressBar.setVisibility(View.VISIBLE);
         }
 
+    }
 
+    /*
+    On create page of submit request all the categories should be available for selection.
+ */
+    private class GetSubCategories extends AsyncTask<Void,Void ,Integer>
+    {
+        @Override
+        protected Integer doInBackground(Void... params  ) {
+
+            PopulateSubCategoryDetails();
+
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer v)
+        {
+            progressBar.setVisibility(View.GONE);
+            Category catObj = allCategories.get( submitRequest.this.category );
+            String[] subCatArr = catObj.getSubCategories().keySet().toArray(new String[catObj.getSubCategories().size()]);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>( submitRequest.this, android.R.layout.simple_spinner_dropdown_item, subCatArr );
+            subCategorySpinner.setAdapter( adapter );
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
     }
+
+    /*
+    On create page of submit request all the categories should be available for selection.
+ */
+    private class GetProductTypes extends AsyncTask<Void, Void ,Integer>
+    {
+        @Override
+        protected Integer doInBackground(Void... params) {
+
+            PopulateProductType();
+             return 1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer v)
+        {
+            progressBar.setVisibility(View.GONE);
+            Category catObj = allCategories.get( submitRequest.this.category );
+            HashMap<String,SubCategory> subCatMap = catObj.getSubCategories();
+
+            SubCategory subCatObj = subCatMap.get( submitRequest.this.subCategory);
+            String[] productArr = subCatObj.getProductTypes().keySet().toArray(
+                    new String[subCatObj.getProductTypes().size()]);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    submitRequest.this, android.R.layout.simple_spinner_dropdown_item,productArr  );
+            productTypeSpinner.setAdapter( adapter );
+            submitButton.setEnabled( true );
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+    }
+
     private void populateCategoryDetails() {
 
         Log.d(TAG,"Populate All Categories");
@@ -128,11 +181,10 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
         // On create we should have all categories fetched to select further details for product
         //TODO remove this code once web service is ready
 
-
         try
         {
             String allCategoriesUrl = getResources().getString( R.string.serviceURL);
-           // allCategoriesUrl += "/categories";
+            allCategoriesUrl += getString(R.string.allCategoriesAPI);
 
             HttpHandler httpHandler = new HttpHandler();
             String response = httpHandler.makeServiceCall(allCategoriesUrl, "GET");
@@ -145,28 +197,17 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 finish();
             }
 
-
-            //TODO verify json ojects returned by webservice
-            JSONObject categoryJSONObject = new JSONObject( response);
-            JSONObject jsonResp = categoryJSONObject.getJSONObject("RestResponse");
-            JSONArray categoryJSONArr = jsonResp.getJSONArray(getString(R.string.json_categories));
+            // JSONObject categoryJSONObject = new JSONObject( response);
+            //JSONObject jsonResp = categoryJSONObject.getJSONObject("RestResponse");
+            JSONArray categoryJSONArr = new JSONArray( response) ;
 
             for( int i=0; i<categoryJSONArr.length(); i++ )
             {
                 JSONObject cat = categoryJSONArr.getJSONObject( i );
-                Integer Id  = cat.getInt("alpha2_code");
-                String name = cat.getString("name");
+                Integer Id  = cat.getInt("categoryId");
+                String name = cat.getString("categoryName");
                 allCategories.put( name,  new Category( Id, name));
             }
-
-            Set<String> keySet = allCategories.keySet();
-            String[] catArr = keySet.toArray( new String[ keySet.size()]);
-
-            //TODO Verify activity lifecycle - do we need to create new adaptor every time or
-            // check if required for existing adapter
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, catArr );
-            categorySpinner.setAdapter( adapter);
 
         }
         catch ( JSONException je)
@@ -175,7 +216,6 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
             //TODO at all exception what action should be taken ( mayb be redirect to home activity)
             Toaster.makeToast(this,"Unexpected Error occurred, try again");
         }
-
 
     }
 
@@ -209,7 +249,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
             else  // Call web service to retrieve sub categories
             {
                 String subCategoriesURL = getResources().getString(R.string.serviceURL);
-                subCategoriesURL += "/subCategory";
+                subCategoriesURL += getString(R.string.allSubCategories);
                 subCategoriesURL += "/";
                 subCategoriesURL += catObj.getCategoryId();
 
@@ -225,21 +265,18 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 }
 
                 //TODO verify json objects returned by webservice
-                JSONObject subCategoryJSONObject = new JSONObject(response);
-                JSONArray subCategoryJSONArr = subCategoryJSONObject.getJSONArray("Categories");
+                JSONArray subCategoryJSONArr = new JSONArray( response );
 
                 HashMap<String,SubCategory> subCatMap = new HashMap<>();
                 for (int i = 0; i < subCategoryJSONArr.length(); i++) {
                     JSONObject cat = subCategoryJSONArr.getJSONObject(i);
-                    Integer Id = cat.getInt("usbCategoryId");
+                    Integer Id = cat.getInt("subCategoryId");
                     String name = cat.getString("subCategoryName");
                     subCatMap.put( name,new SubCategory(Id, name) );
                 }
+                catObj.setSubCategories( subCatMap );
 
-                subCatArr = subCatMap.keySet().toArray(new String[subCatMap.size()]);
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>( this, android.R.layout.simple_spinner_dropdown_item, subCatArr );
-            subCategorySpinner.setAdapter( adapter );
 
         }
         catch ( JSONException je)
@@ -275,8 +312,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 return;
             }
 
-            SubCategory subCatObj = new SubCategory();
-            subCatObj = subCatMap.get( this.subCategory);
+            SubCategory subCatObj =  subCatMap.get( this.subCategory);
 
             String[] productArr ;
             if( subCatObj.getProductTypes().size() > 0)
@@ -288,7 +324,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
             else  // Call web service to retrieve product types
             {
                 String productTypesUrl = getResources().getString(R.string.serviceURL);
-                productTypesUrl += "/products";
+                productTypesUrl += getString(R.string.allProductTypes);
                 productTypesUrl += "/";
                 productTypesUrl += subCatObj.getSubCategoryId();
 
@@ -304,23 +340,19 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 }
 
                 //TODO verify json objects returned by webservice
-                JSONObject productJSONObject = new JSONObject(response);
-                JSONArray productJSONArr = productJSONObject.getJSONArray("Products");
+                JSONArray productJSONArr = new JSONArray( response );
 
 
                 HashMap<String,ProductType>productTypeList = new HashMap<>();
                 for (int i = 0; i < productJSONArr.length(); i++) {
                     JSONObject cat = productJSONArr.getJSONObject(i);
-                    Integer Id = cat.getInt("productId");
-                    String name = cat.getString("productName");
+                    Integer Id = cat.getInt("typeId");
+                    String name = cat.getString("typeName");
                     productTypeList.put( name,new ProductType(Id, name)) ;
                 }
-
-                productArr = productTypeList.keySet().toArray(new String[productTypeList.size()]);
-
+                subCatObj.setProductTypes( productTypeList );
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>( this, android.R.layout.simple_spinner_dropdown_item,productArr  );
-            productTypeSpinner.setAdapter( adapter );
+
         }
         catch ( JSONException je)
         {
@@ -352,7 +384,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 subCategorySpinner.setAdapter(null);
                 productTypeSpinner.setAdapter(null);
 
-                PopulateSubCategoryDetails(  );
+                new GetSubCategories().execute();
 
                 break;
 
@@ -364,7 +396,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 toast.show();
 
                 subCategory = parent.getItemAtPosition(position).toString();
-                PopulateProductType(  );
+                new GetProductTypes().execute();
                 break;
             case R.id.spinnerProductType:
                 toast = Toast.makeText(getApplicationContext(), "Product Selected is: " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT);
@@ -372,7 +404,6 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
                 toast.show();
 
                 productType = parent.getItemAtPosition(position).toString();
-                submitButton.setEnabled( true );
                 break;
             }
         }
@@ -384,7 +415,7 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
         }
 
 
-        // This method will be invoked on click of submit request
+    // This method will be invoked on click of submit request
     public void onSubmitRequest(View view )
     {
         String complaintDetails = Trim.text((EditText) complaintDetailsEditText);
@@ -396,8 +427,8 @@ public class submitRequest extends AppCompatActivity  implements AdapterView.OnI
             return;
         }
 
-        //TODO Enable submit button only after popluating all the values.
-        // If any of the dropdown is not selected do not allow to submit.
+        //TODO send complaint details to web server
+
 
     }
 }

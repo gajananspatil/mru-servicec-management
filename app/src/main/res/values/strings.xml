@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MRU</string>
-    <string name="serviceURL">http://services.groupkt.com/country/get/all</string>
+    <string name="serviceURL">http://139.59.57.136:8080/backend-service-management/api/</string>
     <string name="category">Category</string>
     <string name="complaint_details">Complaint Details</string>
     <string name="sub_category">Sub Category</string>
@@ -25,6 +25,9 @@
     <string name="services_offered_title">Service Offered</string>
     <string name="share_pref">MRU_sharedPrefs</string>
     <string name="json_categories">result</string>
+    <string name="allCategoriesAPI">product/allCategories</string>
+    <string name="allProductTypes">product/allProductTypes</string>
+    <string name="allSubCategories">product/allSubCategories</string>
     <!--string name="registerUser">""</string>
     <string name="validateUser">""</string>
     <string name="allCategories"></string>

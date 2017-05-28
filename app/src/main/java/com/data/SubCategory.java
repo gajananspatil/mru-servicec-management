@@ -20,6 +20,7 @@ public class SubCategory {
     public SubCategory(Integer subCategoryId, String subCategoryName) {
         this.subCategoryId = subCategoryId;
         SubCategoryName = subCategoryName;
+        productTypes = new HashMap<>();
     }
 
     public Integer getSubCategoryId() {
