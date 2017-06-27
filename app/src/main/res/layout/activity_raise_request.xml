@@ -8,67 +8,68 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.activities.submitRequest">
+    tools:context="com.activities.RaiseRequestActivity">
 
 
     <TextView
         android:id="@+id/category"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:text="@string/category"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_alignTop="@+id/spinnerCategory"
-        android:layout_toLeftOf="@+id/spinnerCategory"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/spinnerCategory"
+        android:layout_toStartOf="@+id/spinnerCategory" />
 
     <TextView
         android:id="@+id/subCategory"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="42dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
         android:text="@string/sub_category"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_below="@+id/category"
+        android:layout_below="@+id/spinnerCategory"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/productType"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/subCategory"
-        android:layout_marginTop="25dp"
-        android:layout_toLeftOf="@+id/spinnerProductType"
-        android:layout_toStartOf="@+id/spinnerProductType"
+        android:layout_height="45dp"
         android:text="@string/type"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/subCategory"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@+id/spinnerProductType"
+        android:layout_toStartOf="@+id/spinnerProductType" />
 
     <TextView
         android:id="@+id/subType"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
+        android:text="@string/sub_type"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/productType"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="16dp"
-        android:layout_toLeftOf="@+id/spinnerProductType"
-        android:layout_toStartOf="@+id/spinnerProductType"
-        android:text="@string/sub_type"
-        android:visibility="invisible" />
+        android:layout_toLeftOf="@+id/spinnerSubType"
+        android:layout_toStartOf="@+id/spinnerSubType" />
 
 
     <Spinner
         android:id="@+id/spinnerCategory"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/edit_text_shape_with_state"
-        android:layout_marginTop="54dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -78,60 +79,60 @@
     <Spinner
         android:id="@+id/spinnerSubCategory"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="45dp"
         android:background="@drawable/edit_text_shape_with_state"
         android:layout_alignTop="@+id/subCategory"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/subCategory"
         android:layout_toEndOf="@+id/subCategory" />
 
     <Spinner
         android:id="@+id/spinnerProductType"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/productType"
-        android:layout_toEndOf="@+id/subCategory"
-        android:layout_toRightOf="@+id/subCategory"
+        android:layout_height="45dp"
         android:background="@drawable/edit_text_shape_with_state"
-        android:layout_alignBottom="@+id/productType" />
+        android:layout_alignTop="@+id/productType"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/subCategory"
+        android:layout_toEndOf="@+id/subCategory" />
 
     <Spinner
         android:id="@+id/spinnerSubType"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@+id/subType"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/subType"
-        android:layout_toEndOf="@+id/subType"
-        android:layout_toRightOf="@+id/subType"
+        android:layout_height="45dp"
         android:background="@drawable/edit_text_shape_with_state"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignTop="@+id/subType"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/productType"
+        android:layout_toEndOf="@+id/productType" />
 
     <EditText
         android:id="@+id/complaint_details"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/subType"
         android:background="@drawable/edit_text_shape_with_state"
         android:ems="10"
         android:hint="@string/complaint_details"
         android:paddingLeft="10dp"
         android:inputType="textAutoCorrect|textAutoComplete|textMultiLine"
         android:maxLength="250"
+        android:layout_above="@+id/submitRequestButton"
+        android:layout_marginBottom="11dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <Button
         android:id="@+id/submitRequestButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_bg_rounded_corners"
         android:onClick="onSubmitRequest"
         android:text="@string/submit_request"
-        android:layout_below="@+id/complaint_details"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
     <ProgressBar

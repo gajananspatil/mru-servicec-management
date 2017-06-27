@@ -4,13 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.activities.login">
+    tools:context="com.activities.LoginActivity">
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/login_form"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,30 +29,37 @@
 
         <!--  Email Label -->
         <android.support.design.widget.TextInputLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#372c24">
 
-            <EditText android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/loginId"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="20dip"
+                android:background="@drawable/edit_text_shape_with_state"
+                android:paddingLeft="10dp"
                 android:maxLines="1"
-                android:hint="@string/email_id"
-                android:background="@drawable/edit_text_shape_with_state"/>
+                android:hint="@string/mobile" />
         </android.support.design.widget.TextInputLayout>
 
         <!--  Password Label -->
         <android.support.design.widget.TextInputLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#372c24">
 
-            <EditText android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
                 android:layout_marginTop="5dip"
+                android:background="@drawable/edit_text_shape_with_state"
                 android:maxLines="1"
                 android:inputType="textPassword"
+                android:paddingLeft="10dp"
                 android:hint="@string/password"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -56,12 +73,11 @@
         <!-- Link to Registration Screen -->
         <TextView android:id="@+id/link_to_register"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginTop="40dip"
             android:layout_marginBottom="40dip"
-            android:text="Not Registered? Register here"
+            android:text="@string/register_here"
             android:gravity="center"
-            android:textSize="20dip"
             android:textColor="#0b84aa"/>
     </LinearLayout>
 </RelativeLayout>

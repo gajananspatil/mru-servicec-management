@@ -62,15 +62,19 @@ public class HttpHandler {
         return response;
     }
 
-    public String performPostCall(String requestURL, HashMap<String,String> params ) throws  Exception
+    public String performPostCall(String requestURL, HashMap<String,String> params ) throws  IOException,Exception
     {
         URL url = new URL(requestURL);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String response = "";
         try
         {
+            urlConnection.setRequestMethod("POST");
             urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
             urlConnection.setChunkedStreamingMode(0);
+            //urlConnection.setRequestProperty("Content-Type", "application/json");
+            //urlConnection.setRequestProperty("Content-Length",""+requestBody.length());
 
             OutputStream out = new BufferedOutputStream( urlConnection.getOutputStream());
             BufferedWriter writer = new BufferedWriter( new OutputStreamWriter( out));
@@ -81,7 +85,45 @@ public class HttpHandler {
             {
                 response = convertInputStreamToString( urlConnection.getInputStream());
             }
+            else
+            {
+                response = convertInputStreamToString(urlConnection.getErrorStream());
+            }
+        }
+        finally {
+            urlConnection.disconnect();
+        }
 
+        return response;
+    }
+
+    public String performPostCall(String requestURL, String params ) throws  IOException,Exception
+    {
+        URL url = new URL(requestURL);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String response = "";
+        try
+        {
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.setChunkedStreamingMode(0);
+            //urlConnection.setRequestProperty("Content-Type", "application/json");
+            //urlConnection.setRequestProperty("Content-Length",""+requestBody.length());
+
+            OutputStream out = new BufferedOutputStream( urlConnection.getOutputStream());
+            BufferedWriter writer = new BufferedWriter( new OutputStreamWriter( out));
+            //String postData = getPostDataString( params );
+            writer.write( params );
+
+            if( urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)
+            {
+                response = convertInputStreamToString( urlConnection.getInputStream());
+            }
+            else
+            {
+                response = convertInputStreamToString(urlConnection.getErrorStream());
+            }
         }
         finally {
             urlConnection.disconnect();
@@ -107,7 +149,6 @@ public class HttpHandler {
         }
 
         return stringBuilder.toString();
-
     }
 
     private String convertInputStreamToString(InputStream istream)

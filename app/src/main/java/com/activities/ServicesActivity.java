@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 
 
-public class login extends AppCompatActivity {
+public class ServicesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setTitle( getString(R.string.services_offered_title) );
+
+        setContentView(R.layout.activity_services);
     }
 }

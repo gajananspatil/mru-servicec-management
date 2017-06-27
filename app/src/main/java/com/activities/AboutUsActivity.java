@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.helpers.Toaster;
 
 
-public class aboutUs extends AppCompatActivity implements View.OnClickListener {
+public class AboutUsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG="AboutUs";
     public static final int REQUEST_CALL_PHONE = 0x1;
 
@@ -46,7 +46,7 @@ public class aboutUs extends AppCompatActivity implements View.OnClickListener {
             int isPermitted = ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.CALL_PHONE);
             Log.d(TAG, "Call Phone permission" + isPermitted);
             if( isPermitted != PackageManager.PERMISSION_GRANTED ){
-                ActivityCompat.requestPermissions( aboutUs.this, new String[] {android.Manifest.permission.CALL_PHONE},REQUEST_CALL_PHONE);
+                ActivityCompat.requestPermissions( AboutUsActivity.this, new String[] {android.Manifest.permission.CALL_PHONE},REQUEST_CALL_PHONE);
             }
             startActivity(intent);
         }
